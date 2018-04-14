@@ -1,0 +1,20 @@
+query AvgangsTavleById($stopId: String!, $startTime: DateTime) {
+  stopPlace(id: $stopId) {
+    id
+    name
+    estimatedCalls(startTime: $startTime, timeRange: 72100, numberOfDepartures: 10) {
+      aimedArrivalTime
+      expectedDepartureTime
+      destinationDisplay {
+        frontText
+      }
+      serviceJourney {
+        line {
+          transportMode
+          id
+          name
+        }
+      }
+    }
+  }
+}
