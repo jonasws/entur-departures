@@ -1,11 +1,11 @@
 import "isomorphic-fetch";
 import gql from "nanographql";
 
-import { filter, pathOr, pipe, pathEq, isNil, always } from "ramda";
+import { filter, path, pipe, pathEq, isNil, always } from "ramda";
 
 const ENTUR_API_URL = "https://api.entur.org/journeyplanner/2.0/index/graphql";
 
-interface EstimatedCall {
+export interface EstimatedCall {
   expectedDepartureTime: string;
   destinationDisplay: {
     frontText: string;
@@ -17,9 +17,11 @@ interface EstimatedCall {
   };
 }
 
-type Predicate = string | ((ec: EstimatedCall) => boolean);
+export type Predicate = string | ((ec: EstimatedCall) => boolean);
 
-const getPredicateFunction = (predicate?: Predicate) => {
+const getPredicateFunction = (
+  predicate?: Predicate
+): ((value: EstimatedCall) => boolean) => {
   if (typeof predicate === "string") {
     return pathEq(["serviceJourney", "line", "id"], predicate);
   } else if (!isNil(predicate)) {
@@ -31,7 +33,7 @@ const getPredicateFunction = (predicate?: Predicate) => {
 
 const extractEstimatedCalls = (predicate?: Predicate) =>
   pipe(
-    pathOr([], ["data", "stopPlace", "estimatedCalls"]),
+    path<Array<EstimatedCall>>(["data", "stopPlace", "estimatedCalls"]),
     filter(getPredicateFunction(predicate))
   );
 
@@ -70,6 +72,10 @@ export async function getDepartures(
       "Content-Type": "application/json"
     }
   });
+
+  if (!response.ok) {
+    throw new Error("Failed requesting data from the en-tur API");
+  }
 
   const data = await response.json();
   return extractEstimatedCalls(predicate)(data) as Array<EstimatedCall>;
