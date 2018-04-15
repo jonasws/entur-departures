@@ -5,9 +5,13 @@
   "author": "Jonas Stromsodd <jonas.stromsodd@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "clean": "rimraf ./dist ./.cache/ ./lib",
     "start": "parcel watch src/index.ts --target node",
+    "build": "parcel build src/index.ts --target node",
+    "generate-types": "npm run clean && tsc -p ./tsconfig.json --declaration",
     "test": "jest"
   },
+  "types": "./lib/src/index.d.ts",
   "devDependencies": {
     "@types/isomorphic-fetch": "^0.0.34",
     "@types/jest": "^22.2.3",
@@ -16,6 +20,7 @@
     "jest": "^22.4.3",
     "jest-fetch-mock": "^1.5.0",
     "parcel-bundler": "^1.7.0",
+    "rimraf": "^2.6.2",
     "ts-jest": "^22.4.3",
     "typescript": "^2.8.1"
   },
@@ -26,12 +31,11 @@
     "ramda": "^0.25.0"
   },
   "jest": {
-    "moduleFileExtensions": ["ts", "tsx", "js"],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
     "automock": false,
     "setupFiles": ["./setupJest.js"]
   }
