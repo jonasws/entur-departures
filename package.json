@@ -1,0 +1,38 @@
+{
+  "name": "entur-departures",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Jonas Stromsodd <jonas.stromsodd@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel watch src/index.ts --target node",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/isomorphic-fetch": "^0.0.34",
+    "@types/jest": "^22.2.3",
+    "@types/node-fetch": "^1.6.8",
+    "@types/ramda": "^0.25.21",
+    "jest": "^22.4.3",
+    "jest-fetch-mock": "^1.5.0",
+    "parcel-bundler": "^1.7.0",
+    "ts-jest": "^22.4.3",
+    "typescript": "^2.8.1"
+  },
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
+    "nanographql": "^2.0.0",
+    "node-fetch": "^2.1.2",
+    "ramda": "^0.25.0"
+  },
+  "jest": {
+    "moduleFileExtensions": ["ts", "tsx", "js"],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
+    "automock": false,
+    "setupFiles": ["./setupJest.js"]
+  }
+}
