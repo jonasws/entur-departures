@@ -1,0 +1,9 @@
+/node_modules
+
+/lib
+
+/.cache
+/dist
+/.vscode
+
+/yarn-error.log
