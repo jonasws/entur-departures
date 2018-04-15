@@ -1,7 +1,7 @@
 import "isomorphic-fetch";
 import gql from "nanographql";
 
-import { filter, path, pipe, pathEq, isNil, always } from "ramda";
+import { filter, pathOr, pipe, pathEq, isNil, always } from "ramda";
 
 const ENTUR_API_URL = "https://api.entur.org/journeyplanner/2.0/index/graphql";
 
@@ -32,15 +32,15 @@ const getPredicateFunction = (
 };
 
 const extractEstimatedCalls = (predicate?: Predicate) =>
-  pipe(
-    path<Array<EstimatedCall>>(["data", "stopPlace", "estimatedCalls"]),
+  pipe<{}, ReadonlyArray<EstimatedCall>, EstimatedCall[]>(
+    pathOr([], ["data", "stopPlace", "estimatedCalls"]),
     filter(getPredicateFunction(predicate))
   );
 
 export async function getDepartures(
   stopId: string,
   predicate?: Predicate
-): Promise<Array<EstimatedCall>> {
+): Promise<EstimatedCall[]> {
   const query = gql`
     query AvgangsTavleById($stopId: String!, $startTime: DateTime) {
       stopPlace(id: $stopId) {
@@ -78,5 +78,5 @@ export async function getDepartures(
   }
 
   const data = await response.json();
-  return extractEstimatedCalls(predicate)(data) as Array<EstimatedCall>;
+  return extractEstimatedCalls(predicate)(data);
 }
