@@ -4,7 +4,12 @@
   "main": "dist/index.js",
   "types": "./lib/src/index.d.ts",
   "author": "Jonas Stromsodd <jonas.stromsodd@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jonasws/entur-departures.git"
+  },
   "license": "MIT",
+
   "scripts": {
     "clean": "rimraf ./dist ./.cache/ ./lib",
     "start": "parcel watch src/index.ts --target node",
