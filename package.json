@@ -1,6 +1,6 @@
 {
   "name": "entur-departures",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "dist/index.js",
   "types": "./lib/src/index.d.ts",
   "author": "Jonas Stromsodd <jonas.stromsodd@gmail.com>",
@@ -9,7 +9,6 @@
     "url": "https://github.com/jonasws/entur-departures.git"
   },
   "license": "MIT",
-
   "scripts": {
     "clean": "rimraf ./dist ./.cache/ ./lib",
     "start": "parcel watch src/index.ts --target node",
@@ -36,12 +35,21 @@
     "ramda": "^0.25.0"
   },
   "jest": {
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "automock": false,
-    "setupFiles": ["./setupJest.js"]
+    "setupFiles": [
+      "./setupJest.js"
+    ]
   }
 }
