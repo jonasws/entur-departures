@@ -1,17 +1,17 @@
 {
   "name": "entur-departures",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "./lib/src/index.d.ts",
   "author": "Jonas Stromsodd <jonas.stromsodd@gmail.com>",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf ./dist ./.cache/ ./lib",
     "start": "parcel watch src/index.ts --target node",
-    "build": "parcel build src/index.ts --target node",
+    "build": "parcel build src/index.ts --target node --no-minify",
     "generate-types": "npm run clean && tsc -p ./tsconfig.json --declaration",
     "test": "jest"
   },
-  "types": "./lib/src/index.d.ts",
   "devDependencies": {
     "@types/isomorphic-fetch": "^0.0.34",
     "@types/jest": "^22.2.3",
