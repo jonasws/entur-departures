@@ -1,3 +1,6 @@
 declare module "nanographql" {
-  export default function gql(strings: TemplateStringsArray): (variables: {}) => string;
+  export type QueryFunction<T> = (variables: T) => string;
+  export default function gql<T>(
+    strings: TemplateStringsArray
+  ): QueryFunction<T>;
 }

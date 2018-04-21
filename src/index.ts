@@ -1,82 +1,61 @@
 import "isomorphic-fetch";
-import gql from "nanographql";
+import { QueryFunction } from "nanographql";
 
-import { filter, pathOr, pipe, pathEq, isNil, always } from "ramda";
+import { curry, filter, pathOr, pipe, pathEq, isNil, always } from "ramda";
 
-const ENTUR_API_URL = "https://api.entur.org/journeyplanner/2.0/index/graphql";
+import {
+  AvgangsTavleByQuayId,
+  SearchForStoppestedByName,
+  Quay,
+  StopPlace,
+  ParentStopPlace,
+  StopPlaceResult
+} from "./queries";
 
-export interface EstimatedCall {
-  expectedDepartureTime: string;
-  destinationDisplay: {
-    frontText: string;
-  };
-  serviceJourney: {
-    line: {
-      id: string;
-    };
-  };
-}
+const ENTUR_JOURNEYPLANNER_API_URL =
+  "https://api.entur.org/journeyplanner/2.0/index/graphql";
 
-export type Predicate = string | ((ec: EstimatedCall) => boolean);
+const ENTUR_STOPPESTED_REGISTER_API_URL =
+  "https://api.entur.org/stop_places/1.0/graphql";
 
-const getPredicateFunction = (
-  predicate?: Predicate
-): ((value: EstimatedCall) => boolean) => {
-  if (typeof predicate === "string") {
-    return pathEq(["serviceJourney", "line", "id"], predicate);
-  } else if (!isNil(predicate)) {
-    return predicate;
-  } else {
-    return always(true);
-  }
-};
-
-const extractEstimatedCalls = (predicate?: Predicate) =>
-  pipe<{}, ReadonlyArray<EstimatedCall>, EstimatedCall[]>(
-    pathOr([], ["data", "stopPlace", "estimatedCalls"]),
-    filter(getPredicateFunction(predicate))
-  );
-
-export async function getDepartures(
-  stopId: string,
-  predicate?: Predicate
-): Promise<EstimatedCall[]> {
-  const query = gql`
-    query AvgangsTavleById($stopId: String!, $startTime: DateTime) {
-      stopPlace(id: $stopId) {
-        id
-        name
-        estimatedCalls(
-          startTime: $startTime
-          timeRange: 72100
-          numberOfDepartures: 10
-        ) {
-          expectedDepartureTime
-          destinationDisplay {
-            frontText
-          }
-          serviceJourney {
-            line {
-              id
-            }
-          }
-        }
-      }
-    }
-  `;
-
-  const response = await fetch(ENTUR_API_URL, {
+const fetchQueryFromUrl = async <T, R>(
+  url: string,
+  query: QueryFunction<T>,
+  parameters: T
+): Promise<{ data: R }> => {
+  const response = await fetch(url, {
     method: "POST",
-    body: query({ stopId }),
+    body: query(parameters),
     headers: {
       "Content-Type": "application/json"
     }
   });
-
   if (!response.ok) {
+    console.error(response);
     throw new Error("Failed requesting data from the en-tur API");
   }
 
-  const data = await response.json();
-  return extractEstimatedCalls(predicate)(data);
-}
+  return response.json();
+};
+
+export const getEstimatedCallsByQuayId = (
+  quayId: string,
+  numberOfDepartures: number = 1
+) =>
+  fetchQueryFromUrl<{ quayId: string; numberOfDepartures?: number }, Quay>(
+    ENTUR_JOURNEYPLANNER_API_URL,
+    AvgangsTavleByQuayId,
+    {
+      quayId,
+      numberOfDepartures
+    }
+  );
+
+export const searchForStoppestedByName = (name: string) =>
+  fetchQueryFromUrl<{ name: string }, StopPlaceResult>(
+    ENTUR_STOPPESTED_REGISTER_API_URL,
+    SearchForStoppestedByName,
+    {
+      name
+    }
+  );

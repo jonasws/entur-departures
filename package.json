@@ -11,7 +11,7 @@
   "license": "MIT",
   "scripts": {
     "clean": "rimraf ./lib",
-    "build": "npm run clean && tsc -p ./tsconfig.json",
+    "build": "npm run clean && tsc",
     "test": "jest"
   },
   "devDependencies": {
@@ -32,21 +32,12 @@
     "ramda": "^0.25.0"
   },
   "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "automock": false,
-    "setupFiles": [
-      "./setupJest.js"
-    ]
+    "setupFiles": ["./setupJest.js"]
   }
 }
