@@ -2,17 +2,22 @@ import { QueryFunction } from "nanographql";
 
 const gql = require("nanographql");
 
-export interface Quay {
-  id: string;
-  name: string;
-  estimatedCalls: Array<{
-    expectedDeparturetime: string;
-    serviceJourney: {
-      line: {
-        id: string;
+export interface QuayResponse {
+  quay: {
+    id: string;
+    name: string;
+    estimatedCalls: Array<{
+      expectedDepartureTime: string;
+      destinationDisplay: {
+        frontText: string;
       };
-    };
-  }>;
+      serviceJourney: {
+        line: {
+          id: string;
+        };
+      };
+    }>;
+  };
 }
 
 export const AvgangsTavleByQuayId: QueryFunction<{
@@ -25,6 +30,9 @@ export const AvgangsTavleByQuayId: QueryFunction<{
       name
       estimatedCalls(numberOfDepartures: $numberOfDepartures) {
         expectedDepartureTime
+        destinationDisplay {
+          frontText
+        }
         serviceJourney {
           line {
             transportMode
@@ -36,7 +44,7 @@ export const AvgangsTavleByQuayId: QueryFunction<{
   }
 `;
 
-export type TransportMode = "metro" | "bus" | "train" | "tram";
+export type TransportMode = "metro" | "bus" | "rail" | "tram";
 
 export interface StopPlace {
   __typename: "StopPlace";

@@ -1,12 +1,12 @@
 import "isomorphic-fetch";
 import { QueryFunction } from "nanographql";
 
-import { curry, filter, pathOr, pipe, pathEq, isNil, always } from "ramda";
+import { prop, identity } from "ramda";
 
 import {
   AvgangsTavleByQuayId,
   SearchForStoppestedByName,
-  Quay,
+  QuayResponse,
   StopPlace,
   ParentStopPlace,
   StopPlaceResult
@@ -22,7 +22,7 @@ const fetchQueryFromUrl = async <T, R>(
   url: string,
   query: QueryFunction<T>,
   parameters: T
-): Promise<{ data: R }> => {
+): Promise<R> => {
   const response = await fetch(url, {
     method: "POST",
     body: query(parameters),
@@ -31,27 +31,25 @@ const fetchQueryFromUrl = async <T, R>(
     }
   });
   if (!response.ok) {
-    console.error(response);
     throw new Error("Failed requesting data from the en-tur API");
   }
 
-  return response.json();
+  return prop("data", await response.json());
 };
 
-export const getEstimatedCallsByQuayId = (
+export const getDeparturesByQuayId = (
   quayId: string,
   numberOfDepartures: number = 1
 ) =>
-  fetchQueryFromUrl<{ quayId: string; numberOfDepartures?: number }, Quay>(
-    ENTUR_JOURNEYPLANNER_API_URL,
-    AvgangsTavleByQuayId,
-    {
-      quayId,
-      numberOfDepartures
-    }
-  );
+  fetchQueryFromUrl<
+    { quayId: string; numberOfDepartures?: number },
+    QuayResponse
+  >(ENTUR_JOURNEYPLANNER_API_URL, AvgangsTavleByQuayId, {
+    quayId,
+    numberOfDepartures
+  });
 
-export const searchForStoppestedByName = (name: string) =>
+export const searchForQuayByName = (name: string) =>
   fetchQueryFromUrl<{ name: string }, StopPlaceResult>(
     ENTUR_STOPPESTED_REGISTER_API_URL,
     SearchForStoppestedByName,
