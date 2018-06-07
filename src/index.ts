@@ -4,13 +4,14 @@ import { QueryFunction } from "nanographql";
 import { prop, identity } from "ramda";
 
 import {
-  AvgangsTavleByQuayId,
-  SearchForStoppestedByName,
   QuayResponse,
   StopPlace,
   ParentStopPlace,
   StopPlaceResult
-} from "./queries";
+} from "./types/entur";
+
+import { SearchForStoppestedByName } from "./queries/searchForStoppestedByName";
+import { AvgangsTavleByQuayId } from "./queries/avgangsTableByQuayId";
 
 const ENTUR_JOURNEYPLANNER_API_URL =
   "https://api.entur.org/journeyplanner/2.0/index/graphql";

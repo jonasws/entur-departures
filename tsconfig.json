@@ -2,10 +2,12 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
+    "moduleResolution": "node",
     "lib": ["esnext", "dom"],
     "rootDir": "./src",
     "outDir": "./lib",
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "declaration": true
   },
 
