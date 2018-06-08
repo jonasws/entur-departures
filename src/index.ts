@@ -7,11 +7,16 @@ import {
   QuayResponse,
   StopPlace,
   ParentStopPlace,
-  StopPlaceResult
+  StopPlaceResult,
+  Location
 } from "./types/entur";
 
 import { SearchForStoppestedByName } from "./queries/searchForStoppestedByName";
 import { AvgangsTavleByQuayId } from "./queries/avgangsTableByQuayId";
+import {
+  SimpleJourneyPlanner,
+  TripPattern
+} from "./queries/simpleJourneyPlanner";
 
 const ENTUR_JOURNEYPLANNER_API_URL =
   "https://api.entur.org/journeyplanner/2.0/index/graphql";
@@ -32,6 +37,7 @@ const fetchQueryFromUrl = async <T, R>(
     }
   });
   if (!response.ok) {
+    console.error(response);
     throw new Error("Failed requesting data from the en-tur API");
   }
 
@@ -58,3 +64,17 @@ export const searchForQuayByName = (name: string) =>
       name
     }
   );
+
+export const simpleJourneyPlanner = (
+  from: Location,
+  to: Location,
+  startTime: Date
+) =>
+  fetchQueryFromUrl<
+    { from: Location; to: Location; startTime: Date },
+    { trip: { tripPatterns: Array<TripPattern> } }
+  >(ENTUR_JOURNEYPLANNER_API_URL, SimpleJourneyPlanner, {
+    from,
+    to,
+    startTime
+  });

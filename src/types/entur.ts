@@ -33,4 +33,13 @@ export interface ParentStopPlace {
   children: Array<StopPlace>;
 }
 
+export interface Location {
+  name: string;
+  place?: string;
+  coordinates?: {
+    latitude: number;
+    longitude: number;
+  };
+}
+
 export type StopPlaceResult = Array<StopPlace | ParentStopPlace>;
