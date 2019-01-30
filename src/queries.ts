@@ -8,6 +8,12 @@ export interface QuayResponse {
     name: string;
     estimatedCalls: Array<{
       expectedDepartureTime: string;
+      situations: Array<{
+        description: Array<{
+          value: string;
+          language: string;
+        }>;
+      }>;
       destinationDisplay: {
         frontText: string;
       };
@@ -30,6 +36,12 @@ export const AvgangsTavleByQuayId: QueryFunction<{
       name
       estimatedCalls(numberOfDepartures: $numberOfDepartures) {
         expectedDepartureTime
+        situations {
+          description {
+            value
+            language
+          }
+        }
         destinationDisplay {
           frontText
         }
