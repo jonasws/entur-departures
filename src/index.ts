@@ -13,10 +13,10 @@ import {
 } from "./queries";
 
 const ENTUR_JOURNEYPLANNER_API_URL =
-  "https://api.entur.org/journeyplanner/2.0/index/graphql";
+  "https://api.entur.io/journey-planner/v2/graphql";
 
 const ENTUR_STOPPESTED_REGISTER_API_URL =
-  "https://api.entur.org/stop_places/1.0/graphql";
+  "https://api.entur.io/stop-places/v1/graphql";
 
 const fetchQueryFromUrl = async <T, R>(
   url: string,
