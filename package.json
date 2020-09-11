@@ -28,7 +28,7 @@
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
     "nanographql": "^2.0.0",
-    "node-fetch": "^2.1.2",
+    "node-fetch": "^2.6.1",
     "ramda": "^0.25.0"
   },
   "jest": {
